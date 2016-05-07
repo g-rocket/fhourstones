@@ -13,7 +13,7 @@
 #include "TransGame.c"
  
 #define BOOKPLY 0  // additional plies to be searched full-width
-#define REPORTPLY 2 // additional plies on which to report value
+#define REPORTPLY -1 // additional plies on which to report value
 
 #ifdef WIN32
 #include <windows.h>
@@ -41,6 +41,12 @@ uint64 millisecs()
   struct rusage rusage;
   getrusage(RUSAGE_SELF,&rusage);
   return rusage.ru_utime.tv_sec * 1000 + rusage.ru_utime.tv_usec / 1000;
+}
+uint64 microsecs() 
+{
+  struct timeval NOW; 
+  gettimeofday(&NOW, NULL);
+  return NOW.tv_sec*1000000LL + NOW.tv_usec;
 }
 int min(int x, int y) { return x<y ? x : y; }
 int max(int x, int y) { return x>y ? x : y; }
@@ -172,9 +178,9 @@ int solve()
   inithistory();
   reportply = nplies + REPORTPLY;
   bookply = nplies + BOOKPLY;
-  msecs = millisecs();
+  msecs = microsecs();
   score = ab(LOSS, WIN);
-  msecs = 1L + millisecs() - msecs; // prevent division by 0
+  msecs = /*1L +*/ microsecs() - msecs; // prevent division by 0
   return score;
 }
 
@@ -192,9 +198,9 @@ int main()
     exit(0);
   }
   trans_init();
-  puts("Fhourstones 3.2 (C)");
-  printf("Boardsize = %dx%d\n",WIDTH,HEIGHT);
-  printf("Using %d transposition table entries of size %lu.\n", TRANSIZE, sizeof(hashentry));
+//  puts("Fhourstones 3.2 (C)");
+//  printf("Boardsize = %dx%d\n",WIDTH,HEIGHT);
+//  printf("Using %d transposition table entries of size %lu.\n", TRANSIZE, sizeof(hashentry));
 
   for (;;) {
     reset();
@@ -206,19 +212,20 @@ int main()
     }
     if (c == EOF)
       break;
-    printf("\nSolving %d-ply position after ", nplies);
+//    printf("\nSolving %d-ply position after ", nplies);
     printMoves();
-    puts(" . . .");
+//    puts(" . . .");
 
     emptyTT();
     result = solve();   // expect score << 6 | work
     poscnt = posed;
     for (work=0; (poscnt>>=1) != 0; work++) ; //work = log of #positions stored 
-    printf("score = %d (%c)  work = %d\n",
-      result, "#-<=>+"[result], work);
-    printf("%llu pos / %llu msec = %.1f Kpos/sec\n",
-      nodes, msecs, (double)nodes/msecs);
-    htstat();
+//    printf("score = %d (%c)  work = %d\n",
+//      result, "#-<=>+"[result], work);
+//    printf("%llu pos / %llu msec = %.1f Kpos/sec\n",
+//      nodes, msecs, (double)nodes/msecs);
+    printf(" %d %lu %lu\n", (result - 3)/2, nodes, msecs);
+//    htstat();
   }
   return 0;
 }

@@ -11,7 +11,7 @@ import Data.Array.Unboxed
 import Control.Monad
 import Data.IORef
 import Numeric
-import CPUTime
+import System.CPUTime
 
 data Hash = Hash !Int !Int deriving Show
 

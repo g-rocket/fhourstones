@@ -62,7 +62,8 @@ isLegalWonGame (Game _ _ ntm _) = isLegalWon ntm
 
 move (Game n tm ntm hs) i = (h,g) where
   h = hs!i
-  g = Game (n+1) ntm (setBit tm h) (hs//[(i,h+1)])
+  g = if i >= 7 then Game (n+1) ntm tm hs
+      else          Game (n+1) ntm (setBit tm h) (hs//[(i,h+1)])
 
 encode :: Game -> Word64
 encode (Game n tm ntm _) =
@@ -86,6 +87,8 @@ goodMoves g@(Game _ _ ntm hs) =
 newGame = Game 0 0 0 $ listArray (0,width-1) [0,height'..]
 
 listGame = foldl (\i->snd.(move i)) newGame
+
+specialGame = Game 11 35184382607360 30786329985024 $ listArray (0,width-1) [0,7,18,24,28,35,46]
 
 quads = [quad | i <- [0..bsize-1], dir <- [1,height,height',height''],
                 let max = i + 3*dir, let quad = [i,i+dir..max],

@@ -34,11 +34,11 @@ showbb white black =
   header++'\n':unlines (map showrow [height-1,height-2..0])++wininfo where
   header    = ' ':unwords (map show [1..width])
   showrow h = ' ':intersperse ' ' (map cell [h,h+height'..bsize-1])
-  cell i | testBit black i = '@'
-         | testBit white i = 'O'
+  cell i | testBit black i = 'Z'
+         | testBit white i = 'H'
          | otherwise = '_'
-  wininfo | isWon black = "@ won\n"
-          | isWon white = "O won\n"
+  wininfo | isWon black = "Z won\n"
+          | isWon white = "H won\n"
           | otherwise = ""
 
 instance Show Game where

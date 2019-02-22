@@ -66,16 +66,9 @@ pass (Game n tm ntm heights) = (Game (n+1) ntm tm heights)
 
 makeMove col game = snd $ move game $ col-1
 
-startGame = listGame $ map (\x -> x-1) [3,4,4,3,3,4,7,10,7,10,7,7,3,3,10,6,6]
+startGame = listGame $ map (\x -> x-1) [3,4,4,3,3,4,7,9,7,9,7,7,3,3,9,6,6,6]
 
-theGame = startGame
-
-main = do
-  putStrLn $ ("Fhourstones 3.1 (Haskell)\nBoardsize = "++) .
-           shows width . ('x':) . shows height . ("\nUsing "++) .
-           shows ttsize $ " transposition table entries."
-  --input <- getContents
-  --mapM_ solve $ lines input
+test theGame = do
   putStrLn "The current position is"
   putStrLn (show theGame)
   solve theGame
@@ -103,3 +96,13 @@ main = do
   putStrLn "Column 7"
   putStrLn (show $ makeMove 7 theGame)
   solve $ makeMove 7 theGame
+
+main = do
+  putStrLn $ ("Fhourstones 3.1 (Haskell)\nBoardsize = "++) .
+           shows width . ('x':) . shows height . ("\nUsing "++) .
+           shows ttsize $ " transposition table entries."
+  input <- getContents
+  let moves = map ((\i->i-1).digitToInt) $ filter isDigit input
+  let game@(Game n _ _ _) = listGame moves
+  test game
+  --mapM_ solve $ lines input

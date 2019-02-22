@@ -60,17 +60,17 @@ solve theGame = do
   --   (" msec = "++) . showFFloat (Just 1) (ratio n msecs) $ " Kpos/sec"
   stats <- statsTT tt
   putStrLn stats
+  putStrLn "\n"
 
 pass (Game n tm ntm heights) = (Game (n+1) ntm tm heights)
 
 makeMove col game = snd $ move game $ col-1
 
-startGame = listGame $ map (\x -> x-1) [3,4,4,3,3,3,7,10,7,10,7,7,3,3,10]
+startGame = listGame $ map (\x -> x-1) [3,4,4,3,3,4,7,10,7,10,7,7,3,3,10,6,6]
 
 theGame = startGame
 
 main = do
-  putStrLn (show startGame)
   putStrLn $ ("Fhourstones 3.1 (Haskell)\nBoardsize = "++) .
            shows width . ('x':) . shows height . ("\nUsing "++) .
            shows ttsize $ " transposition table entries."
